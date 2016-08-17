@@ -1,0 +1,51 @@
+body, html {
+  background-color: #1B4450;
+}
+
+.main {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+form {
+  max-width: 800px;
+  background-color: #e6e6e6;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: row;
+  padding: 30px;
+  margin: auto;
+}
+
+input[type=text] {
+  font-family: Roboto;
+  padding: 15px;
+  width: 700px;
+  border-radius: 5px;
+  border: none;
+}
+
+input[type=submit] {
+  max-width: 200px;
+  background-color: steelblue;
+  color: white;
+  border-radius: 0 5px 5px 0;
+  padding: 15px;
+  border: none
+}
+
+h1 {
+  font-family: Roboto;
+  color: white;
+  text-align: center;
+}
+
+p {
+  font-family: Roboto;
+  color: white;
+  text-align: center;
+}
