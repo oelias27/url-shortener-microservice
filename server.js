@@ -34,7 +34,7 @@ app.post('/new/:url(*)', function(req, res) {
       if (validUrl.isUri(params)) {
         console.log('Uri is good');
         var itemId = Math.floor(Math.random() * 10000);
-        var shortenedURL = "https://nameless-falls-53237.herokuapp.com/" + itemId;
+        var shortenedURL = root + itemId;
         var insertedItem = {
           _id: itemId.toString(),
           shortUrl: shortenedURL,
