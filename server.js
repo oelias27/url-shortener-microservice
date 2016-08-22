@@ -54,4 +54,27 @@ app.post('/new/:url(*)', function(req, res) {
   })
 })
 
+app.get('/:short', function(req, res) {
+  MongoClient.connect(dbUrl, function(err, db) {
+    if (err) {
+      console.log('Could not connect to database');
+    }
+    else {
+      console.log('Connected to database');
+
+      db.collection('shorturl').findOne({ "_id" : req.params.short}, function(doc) {
+        if (doc == null) {
+          console.log('URL does not exist, you may create it using the /new/ route');
+          console.log('Did not find document');
+          res.send(req.params.short)
+        }
+        else {
+          res.redirect(doc.originalUrl);
+        }
+        db.close();
+      });
+    }
+  })
+})
+
 app.listen(port);
