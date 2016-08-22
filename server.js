@@ -61,12 +61,12 @@ app.get('/:short', function(req, res) {
     }
     else {
       console.log('Connected to database');
-
-      db.collection('shorturl').findOne({ "_id" : req.params.short}, function(doc) {
+      db.collection('shorturl').findOne({ "_id" : req.params.short}, function(err, doc) {
         if (doc == null) {
-          console.log('URL does not exist, you may create it using the /new/ route');
           console.log('Did not find document');
-          res.send(req.params.short)
+          res.render('index', {
+            URL: 'Could not find shortened URL'
+          })
         }
         else {
           res.redirect(doc.originalUrl);
