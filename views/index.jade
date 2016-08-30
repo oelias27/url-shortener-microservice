@@ -10,7 +10,7 @@ body
   div(id="main")
     h1 URL Shortener
     form(action="/new/" method="post")
-      input(type="text", placeholder="URL here", name="url")
+      input(type="text", placeholder="http://google.com", name="url")
       input(type="submit" value="Shorten")
     - if (originalUrl && URL)
       p Your URL of #{originalUrl}
