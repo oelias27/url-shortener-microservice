@@ -5,8 +5,6 @@ const morgan = require('morgan');
 
 const app = express();
 
-const MongoClient = require('mongodb').MongoClient;
-
 const dbUrl = process.env.DB;
 const port = process.env.PORT;
 
