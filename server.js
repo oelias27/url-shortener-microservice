@@ -7,8 +7,8 @@ const app = express();
 
 const MongoClient = require('mongodb').MongoClient;
 
-const dbUrl = process.env.DB || 'mongodb://127.0.0.1:27017/shorturl';
-const port = process.env.PORT || 3000;
+const dbUrl = process.env.DB;
+const port = process.env.PORT;
 
 app.set('view engine', 'jade');
 app.set('views', './views');
