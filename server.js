@@ -1,80 +1,27 @@
-var bodyParser = require('body-parser');
-var express = require('express');
-var mongodb = require('mongodb')
-var morgan = require('morgan');
-var validUrl = require('valid-url');
+const bodyParser = require('body-parser');
+const express = require('express');
+const mongoose = require('mongoose');
+const morgan = require('morgan');
 
-var app = express();
+const app = express();
 
-var MongoClient = require('mongodb').MongoClient;
+const MongoClient = require('mongodb').MongoClient;
 
-var dbUrl = process.env.DB;
-var root = process.env.ROOT;
-var port = process.env.PORT;
+const dbUrl = process.env.DB || 'mongodb://127.0.0.1:27017/shorturl';
+const port = process.env.PORT || 3000;
 
 app.set('view engine', 'jade');
 app.set('views', './views');
+
 app.use(express.static(__dirname + '/public/styles'));
 app.use('/css', express.static(__dirname + '/public/styles'))
-app.use(morgan('dev'));
+app.use(morgan('combined', { skip: (req, res) => {return res.statusCode < 400}}));
 app.use(bodyParser());
 
-app.get('/', function(req, res) {
-  res.render('index');
-})
+mongoose.connect(dbUrl)
 
-app.post('/new/:url(*)', function(req, res) {
-  MongoClient.connect(dbUrl, function(err, db) {
-    if (err) {
-      console.log('Could not connect to server', err)
-    }
-    else {
-      var collection = db.collection('shorturl');
-      var params = req.body.url;
-      if (validUrl.isUri(params)) {
-        console.log('Uri is good');
-        var itemId = Math.floor(Math.random() * 10000);
-        var shortenedURL = root + itemId;
-        var insertedItem = {
-          _id: itemId.toString(),
-          shortUrl: shortenedURL,
-          originalUrl: params
-        }
-        collection.insert(insertedItem);
-        res.render('index', {
-          originalUrl: params,
-          URL: shortenedURL
-        });
-      }
-      else {
-        res.render('index', {URL: 'URL not recognized - please use a properly formatted URL'})
-      }
-    }
-    db.close();
-  })
-})
+const indexRoutes = require ('./routes/indexRoutes.js')
 
-app.get('/:short', function(req, res) {
-  MongoClient.connect(dbUrl, function(err, db) {
-    if (err) {
-      console.log('Could not connect to database');
-    }
-    else {
-      console.log('Connected to database');
-      db.collection('shorturl').findOne({ "_id" : req.params.short}, function(err, doc) {
-        if (doc == null) {
-          console.log('Did not find document');
-          res.render('index', {
-            URL: 'Could not find shortened URL'
-          })
-        }
-        else {
-          res.redirect(doc.originalUrl);
-        }
-        db.close();
-      });
-    }
-  })
-})
+app.use('/', indexRoutes)
 
 app.listen(port);
